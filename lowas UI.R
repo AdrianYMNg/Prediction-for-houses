@@ -1,11 +1,6 @@
 library(shiny)
 library("Hmisc")
 
-
-setwd("C:\\Users\\Admin\\Documents\\Test_Data")
-my_data <- read.csv("lowa\\lowatrain.csv", sep = ",")
-
-
 options(scipen = 9999)
 ui <- fluidPage(
   titlePanel("Prediction Value of House"),
@@ -50,13 +45,11 @@ Logic <- function(input) {
   }
   Fireplaces <- (as.numeric(input$FirePlaceValue))
   datavalues <- data.frame(SalePrice,LotArea,OverallCond,YearBuilt,CentralAir,KitchenQual,Fireplaces)
+  input_data <<- datavalues
   
-  setwd("C:\\Users\\Admin\\Documents\\Project1")
-  write.csv(datavalues, file = "input_data.csv")
-  
+  setwd("C:\\Users\\Admin\\Documents\\Project1")#-------------change when upload to cloud
   source("lowas predictions.R")
-  Result <- read.table(file="Result_data.csv", header=TRUE, sep=",")
-  Resultdata <- round((as.numeric(Result[1,2])),digits = 2)
+  Resultdata <- round((as.numeric(Result)),digits = 2)
   print(Resultdata)
   return(Resultdata)
 }

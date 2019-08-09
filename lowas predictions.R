@@ -9,13 +9,18 @@ library(class)
 library(caret)
 library(e1071)
 
-getwd()
-setwd("C:\\Users\\Admin\\Documents\\Test_Data")
-my_data <- read.csv("lowa\\lowatrain.csv", sep = ",", header = TRUE)
+setwd("C:\\Users\\Admin\\Documents\\Project1")#------ change when upload to cloud 
+source("Load connection.R")
 
 #Splitting data into 2 sets
-my_test <- my_data[1001:1460,]
-my_data <- my_data[1:1000,]
+rows <- nrow(database)
+splitrow <- (nrow(database))/2
+roundsplit <- round((as.numeric(splitrow)))
+roundplus <- roundsplit + 1
+my_data <- database[1:roundsplit,]
+my_test <- database[roundplus:rows,]
+
+
 
 #Find out column with missing data to not calculate them
 k <- colSums(is.na(my_data))
@@ -23,7 +28,7 @@ missingval<-sort(k, decreasing = TRUE)[1:20]
 barplot(missingval, main = "Missing values", las = 2 )
 hist(my_data$SalePrice, main = " House price", xlab = "price", ylab = "amount", col = "green")
 
-#FInd out what affects the prices
+#Find out what affects the prices
 summary(my_data$SalePrice)
 hist(log(my_data$LotArea), main = "Log:Area", xlab = "area", col = "red")
 hist(my_data$YearBuilt, main = "Year of Building", col = "blue")
@@ -34,7 +39,7 @@ overallcond <- my_data %>% filter(OverallCond != 5)%>% group_by(OverallCond)%>% 
 table(my_data$OverallCond)
 plot(overallcond, col = "red")
 
-#Finding the 
+#Finding the graphs of correlation
 plot(my_data$SalePrice~my_data$LotArea, main = "Area vs Price", xlab = "area", col = "red")
 plot(log(my_data$SalePrice)~log(my_data$LotArea), main = "Log:Area vs Price", xlab = "area", col = "red")
 plot(my_data$SalePrice~my_data$YearBuilt, main = "Year of Building vs Price", col = "blue")
@@ -119,24 +124,14 @@ accuracy <- function()
   print(paste("Accuracy is ", accuracy))
 }
 accuracy()
-
+outpredict <- nrow(bind_data)
 GetPrediction <- function()
 {
-  setwd("C:\\Users\\Admin\\Documents\\Project1")
-  write.csv(train_normal_3, file = "final_data.csv")
-  
-  final_data <- read.table(file="final_data.csv", header=TRUE, sep=",")
-  final_data <- final_data[,-1]
-  
-  input_data <- read.csv("input_data.csv",header=T,sep=",")
-  input_data <- input_data[,-1]
-  
-  bind_data <- rbind(final_data,input_data)
-  pred <- predict(final.model,bind_data[814,])
+  bind_data <- rbind(train_normal_3,input_data)
+  pred <- predict(final.model,bind_data[outpredict,])
   Result <- exp(pred)
   print(paste("Prediction Result is ", Result))
-  
-  write.csv(Result, file = "Result_data.csv")
+  return(Result)
 }
-GetPrediction()
+Result = GetPrediction()
 
