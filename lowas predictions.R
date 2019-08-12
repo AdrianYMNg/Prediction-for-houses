@@ -20,8 +20,6 @@ roundplus <- roundsplit + 1
 my_data <- database[1:roundsplit,]
 my_test <- database[roundplus:rows,]
 
-
-
 #Find out column with missing data to not calculate them
 k <- colSums(is.na(my_data))
 missingval<-sort(k, decreasing = TRUE)[1:20]
@@ -124,6 +122,7 @@ accuracy <- function()
   print(paste("Accuracy is ", accuracy))
 }
 accuracy()
+bind_data <- rbind(train_normal_3,input_data)
 outpredict <- nrow(bind_data)
 GetPrediction <- function()
 {
@@ -133,5 +132,6 @@ GetPrediction <- function()
   print(paste("Prediction Result is ", Result))
   return(Result)
 }
+GetPrediction()
 Result = GetPrediction()
 
