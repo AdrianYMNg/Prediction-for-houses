@@ -17,7 +17,7 @@ Next download the suitable version of SQL IDE so that the database can be import
 
 ## How to Built
 
- 1. Install the packages below as they are required for the application to function properly
+ 1. Run the code below to install the packages as they are required for the application to function properly
 	 - install.packages("dplyr")
 	 - install.packages("BAS")
 	 - install.packages("corrplot")
